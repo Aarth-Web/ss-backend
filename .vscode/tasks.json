@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start server in development mode",
+      "type": "shell",
+      "command": "npm run start:dev",
+      "isBackground": true
+    }
+  ]
+}
