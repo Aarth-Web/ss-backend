@@ -83,16 +83,32 @@ export class UserService {
       .select('-password');
   }
 
-  async getUsersBySchoolId(schoolId: string, page = 1, limit = 10) {
+  async getUsersBySchoolId(
+    schoolId: string,
+    page = 1,
+    limit = 10,
+    searchQuery?: string,
+  ) {
     const skip = (page - 1) * limit;
 
+    // Build the base query
+    const query: any = { school: schoolId };
+
+    // Add search functionality if a query is provided
+    if (searchQuery) {
+      // Search by name, email, mobile, registrationId, or role
+      query.$or = [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { email: { $regex: searchQuery, $options: 'i' } },
+        { mobile: { $regex: searchQuery, $options: 'i' } },
+        { registrationId: { $regex: searchQuery, $options: 'i' } },
+        { role: { $regex: searchQuery, $options: 'i' } },
+      ];
+    }
+
     const [users, total] = await Promise.all([
-      this.userModel
-        .find({ school: schoolId })
-        .skip(skip)
-        .limit(limit)
-        .select('-password'),
-      this.userModel.countDocuments({ school: schoolId }),
+      this.userModel.find(query).skip(skip).limit(limit).select('-password'),
+      this.userModel.countDocuments(query),
     ]);
 
     return {
@@ -104,22 +120,34 @@ export class UserService {
     };
   }
 
-  async getStudentsBySchoolId(schoolId: string, page = 1, limit = 10) {
+  async getStudentsBySchoolId(
+    schoolId: string,
+    page = 1,
+    limit = 10,
+    searchQuery?: string,
+  ) {
     const skip = (page - 1) * limit;
 
+    // Build the base query
+    const query: any = {
+      school: schoolId,
+      role: UserRole.STUDENT, // Only get STUDENT users
+    };
+
+    // Add search functionality if a query is provided
+    if (searchQuery) {
+      // Search by name, email, mobile, or registrationId
+      query.$or = [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { email: { $regex: searchQuery, $options: 'i' } },
+        { mobile: { $regex: searchQuery, $options: 'i' } },
+        { registrationId: { $regex: searchQuery, $options: 'i' } },
+      ];
+    }
+
     const [users, total] = await Promise.all([
-      this.userModel
-        .find({
-          school: schoolId,
-          role: UserRole.STUDENT, // Only get STUDENT users
-        })
-        .skip(skip)
-        .limit(limit)
-        .select('-password'),
-      this.userModel.countDocuments({
-        school: schoolId,
-        role: UserRole.STUDENT,
-      }),
+      this.userModel.find(query).skip(skip).limit(limit).select('-password'),
+      this.userModel.countDocuments(query),
     ]);
 
     return {

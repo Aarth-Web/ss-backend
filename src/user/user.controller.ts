@@ -40,6 +40,7 @@ export class UserController {
     @Query('page') page = 1,
     @Query('limit') limit = 10,
     @Req() req,
+    @Query('search') search?: string,
   ) {
     // If TEACHER, verify they belong to this school and return only students
     if (req.user.role === UserRole.TEACHER) {
@@ -52,13 +53,16 @@ export class UserController {
         schoolId,
         Number(page),
         Number(limit),
+        search,
       );
     }
 
+    // For SUPERADMIN and SCHOOLADMIN
     return this.userService.getUsersBySchoolId(
       schoolId,
       Number(page),
       Number(limit),
+      search,
     );
   }
 
