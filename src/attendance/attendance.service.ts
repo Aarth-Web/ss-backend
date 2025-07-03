@@ -302,7 +302,7 @@ export class AttendanceService {
 
     // Get total count for pagination metadata
     const totalRecords = await this.attendanceModel
-      .countDocuments({ classroom: new Types.ObjectId(classroomId) })
+      .countDocuments({ classroom: classroomId })
       .exec();
 
     // Format records to include attendance statistics and enhance student information
