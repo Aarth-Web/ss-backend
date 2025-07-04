@@ -142,14 +142,15 @@ export class SmsService {
         .select('name mobile additionalInfo')
         .exec();
 
-      // Get classroom name using the provided classroomId
+      // Get classroom name and school name using the provided classroomId
       const classroom = await this.classroomModel
         .findById(classroomId)
-        .select('name')
+        .select('name school')
+        .populate('school', 'name')
         .exec();
       const classroomName = classroom?.name || 'Unknown';
 
-      // Get school name if available (can be enhanced later to fetch from actual school data)
+      // Get school name from the populated school relationship
       const schoolName = classroom?.school?.name || 'School';
 
       let successCount = 0;
