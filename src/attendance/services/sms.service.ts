@@ -31,11 +31,11 @@ export class SmsService {
   ): Promise<string> {
     // If English, return the message directly without translation
     if (language.toLowerCase() === 'english') {
-      return `Dear Parent, ${studentName} was absent from class ${classroomName} on ${formattedDate}. Kindly ensure regular attendance. – ${schoolName}`;
+      return `Dear Parent, ${studentName} was absent from class ${classroomName} on date ${formattedDate}. – ${schoolName}`;
     }
 
     // Create the English template message
-    const englishMessage = `Dear Parent, ${studentName} was absent from class ${classroomName} on ${formattedDate}. Kindly ensure regular attendance. – ${schoolName}`;
+    const englishMessage = `Dear Parent, ${studentName} was absent from class ${classroomName} on date ${formattedDate}. – ${schoolName}`;
 
     try {
       // Get the target language code for RapidAPI
