@@ -9,6 +9,7 @@ This is the backend API for the School System application, built with NestJS and
 - School management
 - Classroom management
 - Attendance tracking with SMS notifications
+- Reading paragraph assignments for English pronunciation practice
 
 ## Getting Started
 
@@ -167,6 +168,22 @@ To test the SMS configuration, run:
 - `PUT /attendance/:id` - Update attendance record
 - `DELETE /attendance/:id` - Delete attendance record
 - `POST /attendance/test-sms` - Test SMS notification
+
+### Reading Paragraphs (English Pronunciation Practice)
+
+- `GET /reading-paragraphs` - Get all reading paragraphs
+- `POST /reading-paragraphs` - Create a new reading paragraph (Teachers only)
+- `GET /reading-paragraphs/:id` - Get reading paragraph by ID
+- `PATCH /reading-paragraphs/:id` - Update reading paragraph (Teachers only)
+- `DELETE /reading-paragraphs/:id` - Delete reading paragraph (Teachers only)
+- `POST /reading-paragraphs/assignments` - Create reading assignment (Teachers only)
+- `GET /reading-paragraphs/assignments/my-assignments` - Get student assignments (Students only)
+- `GET /reading-paragraphs/assignments/teacher-assignments` - Get teacher assignments (Teachers only)
+- `GET /reading-paragraphs/assignments/:id` - Get assignment by ID
+- `POST /reading-paragraphs/assignments/:id/complete` - Complete assignment (Students only)
+- `POST /reading-paragraphs/completions/:id/feedback` - Add teacher feedback (Teachers only)
+
+For detailed documentation, see [Reading Paragraph Module README](src/reading-paragraph/README.md).
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
