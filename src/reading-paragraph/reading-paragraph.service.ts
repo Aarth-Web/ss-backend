@@ -162,6 +162,20 @@ export class ReadingParagraphService {
     return paragraph;
   }
 
+  // Public method - no authentication required
+  async getParagraphByIdPublic(id: string): Promise<ReadingParagraph> {
+    const paragraph = await this.readingParagraphModel
+      .findById(id)
+      .populate('createdBy', 'name registrationId')
+      .exec();
+
+    if (!paragraph) {
+      throw new NotFoundException('Reading paragraph not found');
+    }
+
+    return paragraph;
+  }
+
   async updateParagraph(
     id: string,
     updateDto: UpdateReadingParagraphDto,

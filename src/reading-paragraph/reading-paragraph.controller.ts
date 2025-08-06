@@ -25,13 +25,19 @@ import {
 } from './dto';
 
 @Controller('reading-paragraphs')
-@UseGuards(JwtAuthGuard, RolesGuard)
 export class ReadingParagraphController {
   constructor(
     private readonly readingParagraphService: ReadingParagraphService,
   ) {}
 
-  // Reading Paragraph CRUD endpoints
+  // Public endpoint - no authentication required
+  @Get('public/:id')
+  getParagraphByIdPublic(@Param('id') id: string) {
+    return this.readingParagraphService.getParagraphByIdPublic(id);
+  }
+
+  // Protected endpoints below require authentication
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   @Roles(UserRole.TEACHER)
   createParagraph(
@@ -41,6 +47,7 @@ export class ReadingParagraphController {
     return this.readingParagraphService.createParagraph(createDto, req.user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   @Roles(
     UserRole.SUPERADMIN,
@@ -52,6 +59,7 @@ export class ReadingParagraphController {
     return this.readingParagraphService.getParagraphs(query, req.user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
   @Roles(
     UserRole.SUPERADMIN,
@@ -63,6 +71,7 @@ export class ReadingParagraphController {
     return this.readingParagraphService.getParagraphById(id, req.user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   @Roles(UserRole.TEACHER)
   updateParagraph(
@@ -77,6 +86,7 @@ export class ReadingParagraphController {
     );
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   @Roles(UserRole.TEACHER)
   deleteParagraph(@Param('id') id: string, @Request() req) {
@@ -84,6 +94,7 @@ export class ReadingParagraphController {
   }
 
   // Assignment endpoints
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('assignments')
   @Roles(UserRole.TEACHER)
   createAssignment(
@@ -93,6 +104,7 @@ export class ReadingParagraphController {
     return this.readingParagraphService.createAssignment(createDto, req.user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('assignments/my-assignments')
   @Roles(UserRole.STUDENT)
   getStudentAssignments(
@@ -107,6 +119,7 @@ export class ReadingParagraphController {
     );
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('assignments/teacher-assignments')
   @Roles(UserRole.TEACHER)
   getTeacherAssignments(
@@ -121,12 +134,14 @@ export class ReadingParagraphController {
     );
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('assignments/:id')
   @Roles(UserRole.TEACHER, UserRole.STUDENT)
   getAssignmentById(@Param('id') id: string, @Request() req) {
     return this.readingParagraphService.getAssignmentById(id, req.user);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('assignments/:id/complete')
   @Roles(UserRole.STUDENT)
   completeAssignment(
@@ -141,6 +156,7 @@ export class ReadingParagraphController {
     );
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('completions/:id/feedback')
   @Roles(UserRole.TEACHER)
   addTeacherFeedback(
